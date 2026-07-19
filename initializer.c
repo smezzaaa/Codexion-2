@@ -30,7 +30,7 @@ void    coder_initializer(int n_coders, t_coder *coders, t_compiler *compiler)
         curr->compiler = compiler;
         i++;
     }
-
+    // assigne_dongle()
 }
 
 void    compiler_initializer(t_compiler *compiler, char **av)
