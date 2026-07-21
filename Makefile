@@ -6,7 +6,7 @@
 #    By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/07/06 12:31:35 by smeza-ro          #+#    #+#              #
-#    Updated: 2026/07/19 16:29:42 by smeza-ro         ###   ########.fr        #
+#    Updated: 2026/07/21 16:27:17 by smeza-ro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,14 +14,13 @@
 NAME		= codexion
 
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -g
 LDFLAGS		= -lpthread
 
-SRCS		= 
+SRCS		= initializer.c main.c parser.c priority_queue.c utils.c
 OBJS		= $(SRCS:.c=.o)
 
 HEADER		= codexion.h
-
 %.o: %.c $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@
 
