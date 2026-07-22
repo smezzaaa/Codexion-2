@@ -66,6 +66,8 @@ int    coder_initializer(int n_coders, t_coder **coders, t_compiler *compiler)
 			return (1);
 		coders[i]->id = i + 1;
         coders[i]->last_compile = 0;
+		coders[i]->r_first = 0;
+		coders[i]->l_first = 0;
         coders[i]->compiler = compiler;
         i++;
     }

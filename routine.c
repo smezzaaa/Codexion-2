@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/20 14:31:13 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/22 11:27:42 by smeza-ro         ###   ########.fr       */
+/*   Created: 2026/07/22 11:36:31 by smeza-ro          #+#    #+#             */
+/*   Updated: 2026/07/22 15:58:59 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int main(int ac, char **av)
+void	*coder_routine(void *arg)
 {
-	if (parser(av) == 0 && ac <= 9)
-		exit(1);
-	t_compiler	compiler;
+	t_coder	*coder;
 	int			i;
 
 	i = 0;
-	// compiler = (t_compiler){0};
-	// compiler_initializer(av, &compiler);
-	if (compiler_initializer(&compiler, av) == 1)
-		ft_cleanup(compiler.n_coders, &compiler);
-	if (create_threads(&compiler, compiler.coders, compiler.n_coders) == 1)
-		ft_cleanup(compiler.n_coders, &compiler);
-	ft_cleanup(compiler.n_coders, &compiler);
+	coder = (t_coder *)arg;
+	if (coder->l_dongle->available != 0 && coder->r_dongle != 0)
+		// 
 }

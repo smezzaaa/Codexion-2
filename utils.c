@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/20 19:26:57 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/21 17:32:21 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/22 11:26:10 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,5 @@ void	ft_cleanup(int n_coders, t_compiler *compiler)
 	}
 	safe_free(compiler->coders);
 	safe_free(compiler->dongles);
+	exit(0);
 }
