@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/20 19:26:57 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/22 11:26:10 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/27 20:49:15 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,14 @@
 // 	// free(h->arr[1]);
 // 	free(h);
 // }
+
+long int	gettime()
+{
+	struct timeval tv;
+	if (gettimeofday(&tv, NULL) == 0)
+		return (tv.tv_usec / 1000);
+	return (0);
+}
 
 void safe_free(void *ptr) {
 	if (ptr) {

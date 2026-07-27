@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/20 10:46:24 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/22 11:55:09 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/27 20:38:42 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	fill_pq(int n_coders, t_coder **coders)
 	while (i < n_coders)
 	{
 		coders[i]->l_dongle->pq->arr[0] = coders[i];
-		coders[i]->l_first = 1;
 		if (coders[i]->id == 1)
 			coders[i]->l_dongle->pq->arr[1] = coders[n_coders - 1];
 		else
