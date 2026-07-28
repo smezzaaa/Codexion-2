@@ -86,6 +86,7 @@ int	compiler_initializer(t_compiler *compiler, char **av)
     compiler->d_cooldown = atoi(av[7]);
     compiler->scheduler = av[8];
     compiler->stop_flag = false;
+	compiler->start = 0;
     compiler->dongles = (t_dongle **)malloc(sizeof(t_dongle *) * (size_t)(compiler->n_coders + 1));
 	if (!compiler->dongles)
 		return (1);

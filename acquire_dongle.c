@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/27 20:22:50 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/27 21:16:34 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/28 18:47:57 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,14 @@ static t_coder	*getfirst(t_dongle *dongle)
 //	dongle->new_req += 1;
 //}
 
-void	take_dongles(t_coder *coder, t_dongle *dongle)
+void	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown)
 {
 	coder->i = dongle->new_req;
 	pthread_mutex_lock(&dongle->d_mutex);
 	dongle->new_req++;
-	while (!(dongle->available && (dongle->last_release < gettime()) && getfirst(dongle) == coder))
+	while (!(dongle->available
+			|| ((dongle->last_release + d_cooldown) < gettime(coder->compiler->start))
+			|| getfirst(dongle) == coder))
 	{
 		pthread_cond_wait(&dongle->d_cond, &dongle->d_mutex);
 	}
