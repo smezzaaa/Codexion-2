@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/20 19:26:57 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/28 18:40:48 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/29 18:36:33 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 long long	gettime(long long start)
 {
 	struct timeval tv;
-	long long int	now;
+	long long	now;
 
 	if (gettimeofday(&tv, NULL) == 0)
 	{
-		now = tv.tv_usec / 1000;
+		now = (long long)((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 		return (now - start);
 	}
 	return (0);

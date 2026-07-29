@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 11:36:31 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/29 15:26:19 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/29 18:52:07 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ bool	release_dongle(t_dongle	*dongle, long int start, long int d_cooldown)
 	dongle->last_release = gettime(start);
 	pthread_cond_broadcast(&dongle->d_cond);
 	pthread_mutex_unlock(&dongle->d_mutex);
-	printf("%lld released a dongle\n", gettime(start));
 	return (true);
 }
 
@@ -66,12 +65,13 @@ void	*coder_routine(void *arg)
 	while (!coder->compiler->stop_flag)
 	{
 		take_dongles(coder, coder->l_dongle, coder->compiler->d_cooldown);
-		printf("%lld %d has taken a dongle\n", gettime(coder->compiler->start), coder->id);
+		printf("%lld %d has taken left dongle\n", gettime(coder->compiler->start), coder->id);
 		take_dongles(coder, coder->r_dongle, coder->compiler->d_cooldown);
-		printf("%lld %d has taken a dongle\n", gettime(coder->compiler->start), coder->id);
+		printf("%lld %d has taken right dongle\n", gettime(coder->compiler->start), coder->id);
 		compiling(coder, coder->compiler->t_compile);
 		printf("%lld %d is compiling\n", gettime(coder->compiler->start), coder->id);
 		release_dongle(coder->l_dongle, coder->compiler->start, coder->compiler->d_cooldown);
+		release_dongle(coder->r_dongle, coder->compiler->start, coder->compiler->d_cooldown);
 		refactoring(coder->compiler->t_refactor);
 		printf("%lld %d is refactoring\n", gettime(coder->compiler->start), coder->id);
 		debugging(coder->compiler->t_refactor);

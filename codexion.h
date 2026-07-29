@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/19 17:24:42 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/29 15:09:28 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/29 18:04:24 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_heap
 typedef struct s_dongle
 {
 	bool			available;
-	long int		last_release;
+	long long int		last_release;
 	int				req;
 	pthread_mutex_t	d_mutex;
 	pthread_cond_t	d_cond;
@@ -46,7 +46,7 @@ typedef struct s_coder
 	int			id;
 	int			compiles;
 	int			i;
-	long int	last_compile;
+	long long int	last_compile;
 	t_dongle	*r_dongle;
 	t_dongle	*l_dongle;
 	pthread_t	t;
@@ -56,12 +56,12 @@ typedef struct s_coder
 typedef struct s_compiler
 {
 	int				n_coders;
-	long int		t_compile;
-	long int		t_burnout;
-	long int		t_debug;
-	long int		t_refactor;
+	long long int		t_compile;
+	long long int		t_burnout;
+	long long int		t_debug;
+	long long int		t_refactor;
 	int				n_compiles;
-	long int		d_cooldown;
+	long long int		d_cooldown;
 	char			*scheduler;
 	bool			stop_flag;
 	long long int		start;
