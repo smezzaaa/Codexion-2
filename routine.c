@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 11:36:31 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/28 18:49:01 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/29 15:26:19 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,15 @@ bool	compiling(t_coder *coder, long int t_compile)
 {
 	pthread_mutex_lock(&coder->l_dongle->d_mutex);
 	pthread_mutex_lock(&coder->r_dongle->d_mutex);
-	coder->l_dongle->available = false;
-	coder->r_dongle->available = false;
+	//coder->l_dongle->available = false;
+	//coder->r_dongle->available = false;
 	if (usleep(t_compile / 1000) != 0)
 		return (false);
+	coder->compiles += 1;
 	coder->l_dongle->available = true;
 	coder->r_dongle->available = true;
+	pthread_cond_broadcast(&coder->l_dongle->d_cond);
+	pthread_cond_broadcast(&coder->l_dongle->d_cond);
 	pthread_mutex_unlock(&coder->r_dongle->d_mutex);
 	pthread_mutex_unlock(&coder->l_dongle->d_mutex);
 	return(true);
@@ -51,6 +54,7 @@ bool	release_dongle(t_dongle	*dongle, long int start, long int d_cooldown)
 	dongle->last_release = gettime(start);
 	pthread_cond_broadcast(&dongle->d_cond);
 	pthread_mutex_unlock(&dongle->d_mutex);
+	printf("%lld released a dongle\n", gettime(start));
 	return (true);
 }
 
@@ -72,7 +76,7 @@ void	*coder_routine(void *arg)
 		printf("%lld %d is refactoring\n", gettime(coder->compiler->start), coder->id);
 		debugging(coder->compiler->t_refactor);
 		printf("%lld %d is debugging\n", gettime(coder->compiler->start), coder->id);
-		coder->compiler->stop_flag = false;
+		break;
 	}
 	return (NULL);
 }

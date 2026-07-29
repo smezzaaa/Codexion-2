@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/19 17:24:42 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/28 18:31:59 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/29 15:09:28 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_dongle
 {
 	bool			available;
 	long int		last_release;
-	int				new_req;
+	int				req;
 	pthread_mutex_t	d_mutex;
 	pthread_cond_t	d_cond;
 	t_heap			*pq;
@@ -44,8 +44,9 @@ typedef struct s_dongle
 typedef struct s_coder
 {
 	int			id;
-	long int	last_compile;
+	int			compiles;
 	int			i;
+	long int	last_compile;
 	t_dongle	*r_dongle;
 	t_dongle	*l_dongle;
 	pthread_t	t;

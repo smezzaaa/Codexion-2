@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/20 10:46:24 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/27 20:38:42 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/29 15:38:03 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	fill_pq(int n_coders, t_coder **coders)
 			coders[i]->l_dongle->pq->arr[1] = coders[i - 1];
 		i++;
 	}
-	i = 0;
+	tidy_pq(n_coders, coders);
 }
 
 void	swap_pq(t_heap *pq)
@@ -49,6 +49,8 @@ void	swap_pq(t_heap *pq)
 	
 	tmp = pq->arr[0];
 	pq->arr[0] = pq->arr[1];
+	pq->arr[1]->i++;
+	tmp->i--;
 	pq->arr[1] = tmp;
 }
 

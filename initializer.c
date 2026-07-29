@@ -41,7 +41,7 @@ int    dongle_initializer(int n_coders, t_dongle **dongles)
 		dongles[i] = (t_dongle *)memset(dongles[i], 0, sizeof(t_dongle));
 		dongles[i]->available = true;
         dongles[i]->last_release = 0;
-        dongles[i]->new_req = 1;
+        dongles[i]->req = 0;
         pthread_mutex_init(&dongles[i]->d_mutex, NULL);
         pthread_cond_init(&dongles[i]->d_cond, NULL);
 		dongles[i]->pq = (t_heap *)malloc(sizeof(t_heap));
@@ -67,7 +67,8 @@ int    coder_initializer(int n_coders, t_coder **coders, t_compiler *compiler)
 			return (1);
 		coders[i]->id = i + 1;
         coders[i]->last_compile = 0;
-        coders[i]->i = 1;
+        coders[i]->i = 0;
+		coders[i]->compiles = 0;
         coders[i]->compiler = compiler;
         i++;
     }
@@ -99,6 +100,6 @@ int	compiler_initializer(t_compiler *compiler, char **av)
 		return (1);
 	if (coder_initializer(compiler->n_coders, compiler->coders, compiler) == 1)
 		return (1);
-	fill_pq(compiler->n_coders, compiler->coders);
+	//fill_pq(compiler->n_coders, compiler->coders);
 	return(0);
 }
