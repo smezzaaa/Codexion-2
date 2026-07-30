@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/19 17:24:42 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/29 18:04:24 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/30 16:30:46 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,17 @@ typedef struct s_compiler
 	pthread_cond_t	c_monitor;
 } t_compiler;
 
-int		create_pq(t_heap *pq);
-void	fill_pq(int n_coders, t_coder **coders);
-int		compiler_initializer(t_compiler *compiler, char **av);
-int		coder_initializer(int n_coders, t_coder **coders, t_compiler *compiler);
-int		dongle_initializer(int n_coders, t_dongle **dongles);
-void	assign_dongle(int n_coders, t_coder **coders, t_dongle **dongles);
-int		parser(char **av);
-void	ft_cleanup(int n_coders, t_compiler *compiler);
-void	swap_pq(t_heap *pq);
-void	tidy_pq(int n_coders, t_coder **coders);
+int			parser(char **av);
+int			compiler_initializer(t_compiler *compiler, char **av);
 bool		create_threads(t_coder **coders, int n_coders);
-void	*coder_routine(void *arg);
-void	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown);
+void		*coder_routine(void *arg);
+void		take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown);
+void		ft_cleanup(int n_coders, t_compiler *compiler);
 long long	gettime(long long start);
+int			create_pq(t_heap *pq);
+void		swap_pq(t_heap *pq);
+void		push_coder(t_dongle *dongle, t_coder *coder);
+void		pop_coder(t_heap *pq, t_coder *coder, t_dongle *dongle);
+void		*monitor(void *arg);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/27 20:22:50 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/29 19:04:24 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/30 18:59:35 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ static t_coder	*fifo_scheduler(t_coder *a, t_coder *b)
 {
 	if (a->i < b->i)
 	{
-		printf("%d came before %d\n", a->id, b->id);
+		//printf("%d came before %d\n", a->id, b->id);
 		return (a);
 	}
 	else if (a->i > b->i)
 	{
-		printf("%d came before %d\n", b->id, a->id);
+		//printf("%d came before %d\n", b->id, a->id);
 		return (b);
 	}
 	else
@@ -59,27 +59,10 @@ static t_coder	*getfirst(t_dongle *dongle)
 	return (NULL);
 }
 
-void	pop_coder(t_heap *pq, t_coder *coder, t_dongle *dongle)
-{
-	if (pq->arr[0] == coder)
-		swap_pq(pq);
-	pq->arr[1] = NULL;
-	dongle->req -= 1;
-	pthread_cond_broadcast(&dongle->d_cond);
-}
-
-void	push_coder(t_dongle *dongle, t_coder *coder)
-{
-	coder->i = dongle->req;
-	dongle->pq->arr[dongle->req] = coder;
-	dongle->req += 1;
-	pthread_cond_broadcast(&dongle->d_cond);
-}
-
 void	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown)
 {
 	if ((coder->compiles == 0) && (coder->id % 2 == 0))
-		usleep(5000);
+		usleep(500);
 	pthread_mutex_lock(&dongle->d_mutex);
 	push_coder(dongle, coder);
 	while (!((getfirst(dongle) == coder) && dongle->available

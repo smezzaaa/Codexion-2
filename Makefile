@@ -6,7 +6,7 @@
 #    By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/07/06 12:31:35 by smeza-ro          #+#    #+#              #
-#    Updated: 2026/07/27 20:56:22 by smeza-ro         ###   ########.fr        #
+#    Updated: 2026/07/30 16:31:45 by smeza-ro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CFLAGS		= -Wall -Wextra -Werror -g
 LDFLAGS		= -lpthread
 
 SRCS		= initializer.c main.c parser.c priority_queue.c \
-				utils.c threads.c routine.c acquire_dongle.c
+				utils.c threads.c routine.c acquire_dongle.c monitor.c
 OBJS		= $(SRCS:.c=.o)
 
 HEADER		= codexion.h

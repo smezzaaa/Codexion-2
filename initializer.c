@@ -12,7 +12,7 @@
 
 #include "codexion.h"
 
-void	assign_dongle(int n_coders, t_coder **coders, t_dongle **dongles)
+static void	assign_dongle(int n_coders, t_coder **coders, t_dongle **dongles)
 {
 	int	i;
 
@@ -28,7 +28,7 @@ void	assign_dongle(int n_coders, t_coder **coders, t_dongle **dongles)
 	}
 }
 
-int    dongle_initializer(int n_coders, t_dongle **dongles)
+static int    dongle_initializer(int n_coders, t_dongle **dongles)
 {
     int i;
 
@@ -54,7 +54,7 @@ int    dongle_initializer(int n_coders, t_dongle **dongles)
 	return (0);
 }
 
-int    coder_initializer(int n_coders, t_coder **coders, t_compiler *compiler)
+static int    coder_initializer(int n_coders, t_coder **coders, t_compiler *compiler)
 {
     int i;
 
@@ -88,6 +88,8 @@ int	compiler_initializer(t_compiler *compiler, char **av)
     compiler->scheduler = av[8];
     compiler->stop_flag = false;
 	compiler->start = 0;
+	pthread_mutex_init(&compiler->m_monitor, NULL);
+	pthread_cond_init(&compiler->c_monitor, NULL);
     compiler->dongles = (t_dongle **)malloc(sizeof(t_dongle *) * (size_t)(compiler->n_coders + 1));
 	if (!compiler->dongles)
 		return (1);

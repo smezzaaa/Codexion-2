@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/20 14:31:13 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/29 14:37:10 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/30 18:55:07 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,24 @@ int main(int ac, char **av)
 	int			i;
 
 	i = 0;
-	// compiler = (t_compiler){0};
-	// compiler_initializer(av, &compiler);
 	if (compiler_initializer(&compiler, av) == 1)
 		ft_cleanup(compiler.n_coders, &compiler);
-	compiler.start = gettime(0);
-	//while (compiler.dongles[i])
-	//{
-	//	printf("first: %d, second: %d\n", compiler.dongles[i]->pq->arr[0]->id, compiler.dongles[i]->pq->arr[1]->id);
-	//	i++;
-	//}
-	if (!create_threads(compiler.coders, compiler.n_coders))
+	if (pthread_create(&compiler.t_monitor, NULL, monitor, &compiler) != 0)
+	{
+		pthread_join(compiler.t_monitor, NULL);
+		pthread_mutex_destroy(&compiler.m_monitor);
+		pthread_cond_destroy(&compiler.c_monitor);
 		ft_cleanup(compiler.n_coders, &compiler);
+	}
+	if (!create_threads(compiler.coders, compiler.n_coders))
+	{
+		pthread_join(compiler.t_monitor, NULL);
+		pthread_mutex_destroy(&compiler.m_monitor);
+		pthread_cond_destroy(&compiler.c_monitor);
+		ft_cleanup(compiler.n_coders, &compiler);
+	}
+	pthread_join(compiler.t_monitor, NULL);
 	ft_cleanup(compiler.n_coders, &compiler);
+	pthread_mutex_destroy(&compiler.m_monitor);
+	pthread_cond_destroy(&compiler.c_monitor);
 }
