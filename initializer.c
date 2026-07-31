@@ -68,6 +68,7 @@ static int    coder_initializer(int n_coders, t_coder **coders, t_compiler *comp
 		coders[i]->id = i + 1;
         coders[i]->last_compile = 0;
         coders[i]->i = 0;
+		coders[i]->pos = 0;
 		coders[i]->compiles = 0;
         coders[i]->compiler = compiler;
         i++;

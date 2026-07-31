@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 15:53:14 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/30 18:43:04 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/31 15:31:14 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ static bool	check_bornout(t_coder **coders)
 	while (coders[i])
 	{
 		if ((coders[i]->last_compile + bornout) <= gettime(coders[i]->compiler->start))
+		{
+			printf("%lld %d burned out\n", gettime(coders[i]->compiler->start), coders[i]->id);
 			return (true);
+		}
 		i++;
 	}
 	return (false);
@@ -52,7 +55,7 @@ static void	stop_simulation(t_dongle **dongles)
 	while(dongles[i])
 	{
 		pthread_mutex_lock(&dongles[i]->d_mutex);
-		pthread_cond_wait(&dongles[i]->d_cond, &dongles[i]->d_mutex);
+		pthread_cond_broadcast(&dongles[i]->d_cond);
 		pthread_mutex_unlock(&dongles[i]->d_mutex);
 		i++;
 	}
@@ -65,9 +68,6 @@ void	*monitor(void *arg)
 
 	compiler = (t_compiler *)arg;
 	stop = 0;
-	pthread_mutex_lock(&compiler->m_monitor);
-	compiler->start = gettime(0);
-	pthread_mutex_unlock(&compiler->m_monitor);
 	while (stop == 0)
 	{
 		if (check_bornout(compiler->coders) || check_n_compiles(compiler->coders))
@@ -77,6 +77,7 @@ void	*monitor(void *arg)
 			compiler->stop_flag = true;
 			stop_simulation(compiler->dongles);
 			pthread_mutex_lock(&compiler->m_monitor);
+			break;
 		}
 		usleep(500);
 	}

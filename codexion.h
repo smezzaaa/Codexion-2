@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/19 17:24:42 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/30 16:30:46 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/31 15:00:35 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_coder
 	int			id;
 	int			compiles;
 	int			i;
+	int			pos;
 	long long int	last_compile;
 	t_dongle	*r_dongle;
 	t_dongle	*l_dongle;

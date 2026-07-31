@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/27 20:22:50 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/30 18:59:35 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/31 15:04:01 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ static t_coder	*edf_scheduler(t_coder *a, t_coder *b)
 
 static t_coder	*fifo_scheduler(t_coder *a, t_coder *b)
 {
-	if (a->i < b->i)
+	if (a->pos < b->pos)
 	{
 		//printf("%d came before %d\n", a->id, b->id);
 		return (a);
 	}
-	else if (a->i > b->i)
+	else if (a->pos > b->pos)
 	{
 		//printf("%d came before %d\n", b->id, a->id);
 		return (b);
@@ -72,7 +72,6 @@ void	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown)
 		pthread_cond_wait(&dongle->d_cond, &dongle->d_mutex);
 	}
 	dongle->available = false;
-	if (coder->compiles == coder->compiler->n_compiles)
-		pop_coder(dongle->pq, coder, dongle);
+	pop_coder(dongle->pq, coder, dongle);
 	pthread_mutex_unlock(&dongle->d_mutex);
 }

@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/20 10:46:24 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/30 18:59:47 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/31 15:09:15 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,21 @@
 
 void	pop_coder(t_heap *pq, t_coder *coder, t_dongle *dongle)
 {
-	if (pq->arr[0] == coder)
+	if (pq->arr[0] == coder && pq->arr[1])
 		swap_pq(pq);
 	pq->arr[1] = NULL;
+	coder->pos = 0;
 	dongle->req -= 1;
-	pthread_cond_broadcast(&dongle->d_cond);
+	//pthread_cond_broadcast(&dongle->d_cond);
 }
 
 void	push_coder(t_dongle *dongle, t_coder *coder)
 {
-	if (dongle->req == 1)
-		coder->i = 1;
+	coder->pos = dongle->req++;
+	if (dongle->pq->arr[0] == NULL)
+		dongle->pq->arr[0] = coder;
 	else
-		coder->i = 0;
-	dongle->pq->arr[coder->i] = coder;
-	//printf("coder %d is in pos %d\n", coder->id, coder->i);
-	dongle->req += 1;
+		dongle->pq->arr[1] = coder;
 	pthread_cond_broadcast(&dongle->d_cond);
 }
 
@@ -69,8 +68,8 @@ void	swap_pq(t_heap *pq)
 
 	tmp = pq->arr[0];
 	pq->arr[0] = pq->arr[1];
-	pq->arr[1]->i = 0;
-	tmp->i = 1;
+	pq->arr[1]->pos = 1;
+	tmp->pos = 2;
 	pq->arr[1] = tmp;
 }
 

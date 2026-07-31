@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/20 14:31:13 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/30 18:55:07 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/07/31 14:50:17 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int main(int ac, char **av)
 	i = 0;
 	if (compiler_initializer(&compiler, av) == 1)
 		ft_cleanup(compiler.n_coders, &compiler);
+	compiler.start = gettime(0);
 	if (pthread_create(&compiler.t_monitor, NULL, monitor, &compiler) != 0)
 	{
 		pthread_join(compiler.t_monitor, NULL);
