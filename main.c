@@ -14,12 +14,10 @@
 
 int main(int ac, char **av)
 {
-	if (parser(av) == 0 && ac <= 9)
+	if (ac != 9 || !parser(av))
 		exit(1);
 	t_compiler	compiler;
-	int			i;
 
-	i = 0;
 	if (compiler_initializer(&compiler, av) == 1)
 		ft_cleanup(compiler.n_coders, &compiler);
 	compiler.start = gettime(0);

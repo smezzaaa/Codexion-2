@@ -45,7 +45,12 @@
 void	pop_coder(t_heap *pq, t_coder *coder, t_dongle *dongle)
 {
 	if (pq->arr[0] == coder && pq->arr[1])
-		swap_pq(pq);
+	{
+		if (pq->arr[1])
+			swap_pq(pq);
+		else
+			pq->arr[0] = NULL;
+	}
 	pq->arr[1] = NULL;
 	coder->pos = 0;
 	dongle->req -= 1;
@@ -54,7 +59,8 @@ void	pop_coder(t_heap *pq, t_coder *coder, t_dongle *dongle)
 
 void	push_coder(t_dongle *dongle, t_coder *coder)
 {
-	coder->pos = dongle->req++;
+	dongle->req++;
+	coder->pos = dongle->next++;
 	if (dongle->pq->arr[0] == NULL)
 		dongle->pq->arr[0] = coder;
 	else

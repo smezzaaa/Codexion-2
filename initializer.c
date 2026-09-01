@@ -42,6 +42,8 @@ static int    dongle_initializer(int n_coders, t_dongle **dongles)
 		dongles[i]->available = true;
         dongles[i]->last_release = 0;
         dongles[i]->req = 0;
+		dongles[i]->next = 0;
+		dongles[i]->id = i + 1;
         pthread_mutex_init(&dongles[i]->d_mutex, NULL);
         pthread_cond_init(&dongles[i]->d_cond, NULL);
 		dongles[i]->pq = (t_heap *)malloc(sizeof(t_heap));

@@ -34,8 +34,10 @@ typedef struct s_heap
 typedef struct s_dongle
 {
 	bool			available;
-	long long int		last_release;
+	long long int	last_release;
 	int				req;
+	long long int	next;
+	int				id;
 	pthread_mutex_t	d_mutex;
 	pthread_cond_t	d_cond;
 	t_heap			*pq;
@@ -73,7 +75,7 @@ typedef struct s_compiler
 	pthread_cond_t	c_monitor;
 } t_compiler;
 
-int			parser(char **av);
+bool			parser(char **av);
 int			compiler_initializer(t_compiler *compiler, char **av);
 bool		create_threads(t_coder **coders, int n_coders);
 void		*coder_routine(void *arg);

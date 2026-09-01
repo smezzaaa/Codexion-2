@@ -12,23 +12,26 @@
 
 #include "codexion.h"
 
-int	parser(char **av)
+bool	parser(char **av)
 {
+	if (!av || !av[1] || !av[2] || !av[3] || !av[4]
+		|| !av[5] || !av[6] || !av[7] || !av[8])
+        return (false);
 	if (atoi(av[1]) == 0)
-		return 0;
+		return (false);
 	if (atoi(av[2]) == 0)
-		return 0;
+		return (false);
 	if (atoi(av[3]) == 0)
-		return 0;
+		return (false);
 	if (atoi(av[4]) == 0)
-		return 0;
+		return (false);
 	if (atoi(av[5]) == 0)
-		return 0;
+		return (false);
 	if (atoi(av[6]) == 0)
-		return 0;
+		return (false);
 	if (atoi(av[7]) == 0)
-		return 0;
+		return (false);
 	if (strcmp(av[8], "fifo") != 0 && strcmp(av[8], "edf") != 0)
-		return 0;
-	return (1);
+		return (false);
+	return (true);
 }

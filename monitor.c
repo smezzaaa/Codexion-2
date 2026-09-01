@@ -21,7 +21,7 @@ static bool	check_n_compiles(t_coder **coders)
 	compiles = coders[0]->compiler->n_compiles;
 	while (coders[i])
 	{
-		if (coders[i]->compiles <= compiles)
+		if (coders[i]->compiles < compiles)
 			return (false);
 		i++;
 	}
@@ -76,7 +76,7 @@ void	*monitor(void *arg)
 			pthread_mutex_lock(&compiler->m_monitor);
 			compiler->stop_flag = true;
 			stop_simulation(compiler->dongles);
-			pthread_mutex_lock(&compiler->m_monitor);
+			pthread_mutex_unlock(&compiler->m_monitor);
 			break;
 		}
 		usleep(500);
