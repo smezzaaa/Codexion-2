@@ -61,13 +61,13 @@ static t_coder	*getfirst(t_dongle *dongle)
 
 void	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown)
 {
-	//if ((coder->compiles == 0) && (coder->id % 2 == 0))
-	//	usleep(500);
+	if ((coder->compiles == 0) && (coder->id % 2 == 0))
+		usleep(200);
 	pthread_mutex_lock(&dongle->d_mutex);
 	push_coder(dongle, coder);
 	while (!((getfirst(dongle) == coder) && dongle->available
 			&& ((dongle->last_release + d_cooldown) < gettime(coder->compiler->start)
-			|| (dongle->last_release == 0))))
+			|| (dongle->last_release == 0))) && (!coder->compiler->stop_flag))
 	{
 		pthread_cond_wait(&dongle->d_cond, &dongle->d_mutex);
 	}

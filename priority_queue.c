@@ -44,7 +44,7 @@
 
 void	pop_coder(t_heap *pq, t_coder *coder, t_dongle *dongle)
 {
-	if (pq->arr[0] == coder && pq->arr[1])
+	if (pq->arr[0] == coder)
 	{
 		if (pq->arr[1])
 			swap_pq(pq);

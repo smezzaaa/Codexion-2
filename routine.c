@@ -36,14 +36,18 @@ static bool	debugging(long int t_debug)
 	return (true);
 }
 
-static t_dongle	*get_next_dongle(t_coder *coder, t_dongle *dongle)
+static t_dongle	*get_first_dongle(t_coder *coder)
 {
-	if (dongle->id == coder->l_dongle->id)
-		return (coder->l_dongle);
-	else if (dongle->id == coder->r_dongle->id)
-		return (coder->r_dongle);
-	else
-		return (NULL);
+    if (coder->l_dongle->id < coder->r_dongle->id)
+        return (coder->l_dongle);
+    return (coder->r_dongle);
+}
+
+static t_dongle	*get_second_dongle(t_coder *coder)
+{
+    if (coder->l_dongle->id < coder->r_dongle->id)
+        return (coder->r_dongle);
+    return (coder->l_dongle);
 }
 
 static bool	release_dongle(t_dongle	*dongle, long int start)
@@ -63,9 +67,9 @@ void	*coder_routine(void *arg)
 	coder = (t_coder *)arg;
 	while (!coder->compiler->stop_flag)
 	{
-		take_dongles(coder, get_next_dongle(coder, coder->l_dongle), coder->compiler->d_cooldown);
+		take_dongles(coder, get_first_dongle(coder), coder->compiler->d_cooldown);
 		printf("%lld %d has taken left dongle\n", gettime(coder->compiler->start), coder->id);
-		take_dongles(coder, get_next_dongle(coder, coder->r_dongle), coder->compiler->d_cooldown);
+		take_dongles(coder, get_second_dongle(coder), coder->compiler->d_cooldown);
 		printf("%lld %d has taken right dongle\n", gettime(coder->compiler->start), coder->id);
 		coder->last_compile = gettime(coder->compiler->start);
 		compiling(coder, coder->compiler->t_compile);
