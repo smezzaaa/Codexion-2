@@ -79,7 +79,7 @@ bool			parser(char **av);
 int			compiler_initializer(t_compiler *compiler, char **av);
 bool		create_threads(t_coder **coders, int n_coders);
 void		*coder_routine(void *arg);
-void		take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown);
+bool		take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown);
 void		ft_cleanup(int n_coders, t_compiler *compiler);
 long long	gettime(long long start);
 int			create_pq(t_heap *pq);

@@ -60,6 +60,8 @@ static bool	release_dongle(t_dongle	*dongle, long int start)
 	return (true);
 }
 
+// aggiungere condizione stop_flag a tutte le chiamate alle funzioni della routine!
+
 void	*coder_routine(void *arg)
 {
 	t_coder	*coder;
@@ -67,9 +69,11 @@ void	*coder_routine(void *arg)
 	coder = (t_coder *)arg;
 	while (!coder->compiler->stop_flag)
 	{
-		take_dongles(coder, get_first_dongle(coder), coder->compiler->d_cooldown);
+		if (!take_dongles(coder, get_first_dongle(coder), coder->compiler->d_cooldown))
+			return(NULL) ;
 		printf("%lld %d has taken left dongle\n", gettime(coder->compiler->start), coder->id);
-		take_dongles(coder, get_second_dongle(coder), coder->compiler->d_cooldown);
+		if (!take_dongles(coder, get_second_dongle(coder), coder->compiler->d_cooldown))
+			return(NULL) ;
 		printf("%lld %d has taken right dongle\n", gettime(coder->compiler->start), coder->id);
 		coder->last_compile = gettime(coder->compiler->start);
 		compiling(coder, coder->compiler->t_compile);

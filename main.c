@@ -15,7 +15,10 @@
 int main(int ac, char **av)
 {
 	if (ac != 9 || !parser(av))
+	{
+		printf("[Warning] Input Error Detected.\n");
 		exit(1);
+	}
 	t_compiler	compiler;
 
 	if (compiler_initializer(&compiler, av) == 1)

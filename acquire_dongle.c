@@ -59,7 +59,7 @@ static t_coder	*getfirst(t_dongle *dongle)
 	return (NULL);
 }
 
-void	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown)
+bool	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown)
 {
 	if ((coder->compiles == 0) && (coder->id % 2 == 0))
 		usleep(200);
@@ -70,8 +70,15 @@ void	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown)
 			|| (dongle->last_release == 0))) && (!coder->compiler->stop_flag))
 	{
 		pthread_cond_wait(&dongle->d_cond, &dongle->d_mutex);
+		if (coder->compiler->stop_flag)
+		{
+			pthread_mutex_unlock(&dongle->d_mutex);
+			if (coder->compiler->stop_flag)
+				return (false);
+		}
 	}
 	dongle->available = false;
 	pop_coder(dongle->pq, coder, dongle);
 	pthread_mutex_unlock(&dongle->d_mutex);
+	return (true);
 }
