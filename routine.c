@@ -19,20 +19,23 @@ static bool	compiling(t_coder *coder, long int t_compile)
 	if (usleep(t_compile * 1000) != 0)
 		return (false);
 	coder->compiles += 1;
+	printf("%lld %d is compiling\n", gettime(coder->compiler->start), coder->id);
 	return(true);
 }
 
-static bool	refactoring(long int t_refactor)
+static bool	refactoring(t_coder *coder, long int t_refactor)
 {
 	if (usleep(t_refactor * 1000) != 0)
 		return (false);
+	printf("%lld %d is refactoring\n", gettime(coder->compiler->start), coder->id);
 	return (true);
 }
 
-static bool	debugging(long int t_debug)
+static bool	debugging(t_coder *coder, long int t_debug)
 {
 	if (usleep(t_debug * 1000) != 0)
 		return (false);
+	printf("%lld %d is debugging\n", gettime(coder->compiler->start), coder->id);
 	return (true);
 }
 
@@ -77,13 +80,14 @@ void	*coder_routine(void *arg)
 		printf("%lld %d has taken right dongle\n", gettime(coder->compiler->start), coder->id);
 		coder->last_compile = gettime(coder->compiler->start);
 		compiling(coder, coder->compiler->t_compile);
-		printf("%lld %d is compiling\n", gettime(coder->compiler->start), coder->id);
 		release_dongle(coder->l_dongle, coder->compiler->start);
 		release_dongle(coder->r_dongle, coder->compiler->start);
-		refactoring(coder->compiler->t_refactor);
-		printf("%lld %d is refactoring\n", gettime(coder->compiler->start), coder->id);
-		debugging(coder->compiler->t_refactor);
-		printf("%lld %d is debugging\n", gettime(coder->compiler->start), coder->id);
+		if (!coder->compiler->stop_flag)
+			break;
+		refactoring(coder, coder->compiler->t_refactor);
+		if (!coder->compiler->stop_flag)
+			break;
+		debugging(coder, coder->compiler->t_debug);
 	}
 	return (NULL);
 }

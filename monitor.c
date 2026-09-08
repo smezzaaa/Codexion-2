@@ -64,15 +64,12 @@ static void	stop_simulation(t_dongle **dongles)
 void	*monitor(void *arg)
 {
 	t_compiler	*compiler;
-	int			stop;
 
 	compiler = (t_compiler *)arg;
-	stop = 0;
-	while (stop == 0)
+	while (1)
 	{
 		if (check_bornout(compiler->coders) || check_n_compiles(compiler->coders))
 		{
-			stop = 1;
 			pthread_mutex_lock(&compiler->m_monitor);
 			compiler->stop_flag = true;
 			stop_simulation(compiler->dongles);
