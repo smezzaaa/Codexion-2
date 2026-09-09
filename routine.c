@@ -14,26 +14,27 @@
 
 static bool	compiling(t_coder *coder, long int t_compile)
 {
+	coder->last_compile = gettime(coder->compiler->start);
+	printf("%lld %d is compiling\n", gettime(coder->compiler->start), coder->id);
 	if (usleep(t_compile * 1000) != 0)
 		return (false);
 	coder->compiles += 1;
-	printf("%lld %d is compiling\n", gettime(coder->compiler->start), coder->id);
 	return(true);
 }
 
 static bool	refactoring(t_coder *coder, long int t_refactor)
 {
+	printf("%lld %d is refactoring\n", gettime(coder->compiler->start), coder->id);
 	if (usleep(t_refactor * 1000) != 0)
 		return (false);
-	printf("%lld %d is refactoring\n", gettime(coder->compiler->start), coder->id);
 	return (true);
 }
 
 static bool	debugging(t_coder *coder, long int t_debug)
 {
+	printf("%lld %d is debugging\n", gettime(coder->compiler->start), coder->id);
 	if (usleep(t_debug * 1000) != 0)
 		return (false);
-	printf("%lld %d is debugging\n", gettime(coder->compiler->start), coder->id);
 	return (true);
 }
 
@@ -75,7 +76,6 @@ void	*coder_routine(void *arg)
 			return(NULL);
 		printf("%lld %d has taken right dongle\n", gettime(coder->compiler->start), coder->id);
 		compiling(coder, coder->compiler->t_compile);
-		coder->last_compile = gettime(coder->compiler->start);
 		release_dongle(coder->l_dongle, coder->compiler->start);
 		release_dongle(coder->r_dongle, coder->compiler->start);
 		if (coder->compiler->burnout_flag)

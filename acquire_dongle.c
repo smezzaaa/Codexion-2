@@ -55,6 +55,9 @@ static t_coder	*getfirst(t_dongle *dongle)
 
 bool	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown)
 {
+	struct timeval	now;
+	struct timespec	ts;
+
 	if ((coder->compiles == 0) && (coder->id % 2 == 0))
 		usleep(200);
 	pthread_mutex_lock(&dongle->d_mutex);
@@ -63,7 +66,15 @@ bool	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown)
 			&& ((dongle->last_release + d_cooldown) < gettime(coder->compiler->start)
 			|| (dongle->last_release == 0))) && (!coder->compiler->stop_flag))
 	{
-		pthread_cond_wait(&dongle->d_cond, &dongle->d_mutex);
+		gettimeofday(&now, NULL);
+		ts.tv_sec = now.tv_sec;
+		ts.tv_nsec = (now.tv_usec + 5000) * 1000;
+		if (ts.tv_nsec >= 1000000000)
+		{
+			ts.tv_sec += 1;
+			ts.tv_nsec -= 1000000000;
+		}
+		pthread_cond_timedwait(&dongle->d_cond, &dongle->d_mutex, &ts);
 		if (coder->compiler->stop_flag)
 		{
 			pthread_mutex_unlock(&dongle->d_mutex);
