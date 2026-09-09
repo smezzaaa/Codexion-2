@@ -28,17 +28,19 @@ static bool	check_n_compiles(t_coder **coders)
 	return (true);
 }
 
-static bool	check_bornout(t_coder **coders)
+static bool	check_burnout(t_coder **coders)
 {
 	int	i;
-	long long	bornout;
+	long long	burnout;
 
 	i = 0;
-	bornout = coders[0]->compiler->t_burnout;
+	burnout = coders[0]->compiler->t_burnout;
 	while (coders[i])
 	{
-		if ((coders[i]->last_compile + bornout) <= gettime(coders[i]->compiler->start))
+		if ((coders[i]->last_compile + burnout) <= gettime(coders[i]->compiler->start))
 		{
+			//printf("%d last compile: %lld\n", coders[i]->id, coders[i]->last_compile);
+			//printf("last compile + burnout: %lld\n", coders[i]->last_compile + burnout);
 			printf("%lld %d burned out\n", gettime(coders[i]->compiler->start), coders[i]->id);
 			return (true);
 		}
@@ -68,7 +70,17 @@ void	*monitor(void *arg)
 	compiler = (t_compiler *)arg;
 	while (1)
 	{
-		if (check_bornout(compiler->coders) || check_n_compiles(compiler->coders))
+		if (check_burnout(compiler->coders))
+		{
+			pthread_mutex_lock(&compiler->m_monitor);
+			compiler->burnout_flag = true;
+			compiler->stop_flag = true;
+			stop_simulation(compiler->dongles);
+			pthread_mutex_unlock(&compiler->m_monitor);
+			break;
+		}
+
+		if (check_n_compiles(compiler->coders))
 		{
 			pthread_mutex_lock(&compiler->m_monitor);
 			compiler->stop_flag = true;

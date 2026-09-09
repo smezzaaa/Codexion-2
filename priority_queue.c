@@ -51,7 +51,8 @@ void	pop_coder(t_heap *pq, t_coder *coder, t_dongle *dongle)
 		else
 			pq->arr[0] = NULL;
 	}
-	pq->arr[1] = NULL;
+	else
+		pq->arr[1] = NULL;
 	coder->pos = 0;
 	dongle->req -= 1;
 	//pthread_cond_broadcast(&dongle->d_cond);
@@ -61,11 +62,11 @@ void	push_coder(t_dongle *dongle, t_coder *coder)
 {
 	dongle->req++;
 	coder->pos = dongle->next++;
-	if (dongle->pq->arr[0] == NULL)
+	if (!dongle->pq->arr[0])
 		dongle->pq->arr[0] = coder;
 	else
 		dongle->pq->arr[1] = coder;
-	pthread_cond_broadcast(&dongle->d_cond);
+	//pthread_cond_broadcast(&dongle->d_cond);
 }
 
 void	swap_pq(t_heap *pq)

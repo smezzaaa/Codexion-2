@@ -12,8 +12,6 @@
 
 #include "codexion.h"
 
-//inizializzare compiler->start all'inizio della simulazione
-
 static bool	compiling(t_coder *coder, long int t_compile)
 {
 	if (usleep(t_compile * 1000) != 0)
@@ -63,8 +61,6 @@ static bool	release_dongle(t_dongle	*dongle, long int start)
 	return (true);
 }
 
-// aggiungere condizione stop_flag a tutte le chiamate alle funzioni della routine!
-
 void	*coder_routine(void *arg)
 {
 	t_coder	*coder;
@@ -73,19 +69,19 @@ void	*coder_routine(void *arg)
 	while (!coder->compiler->stop_flag)
 	{
 		if (!take_dongles(coder, get_first_dongle(coder), coder->compiler->d_cooldown))
-			return(NULL) ;
+			return(NULL);
 		printf("%lld %d has taken left dongle\n", gettime(coder->compiler->start), coder->id);
 		if (!take_dongles(coder, get_second_dongle(coder), coder->compiler->d_cooldown))
-			return(NULL) ;
+			return(NULL);
 		printf("%lld %d has taken right dongle\n", gettime(coder->compiler->start), coder->id);
-		coder->last_compile = gettime(coder->compiler->start);
 		compiling(coder, coder->compiler->t_compile);
+		coder->last_compile = gettime(coder->compiler->start);
 		release_dongle(coder->l_dongle, coder->compiler->start);
 		release_dongle(coder->r_dongle, coder->compiler->start);
-		if (!coder->compiler->stop_flag)
+		if (coder->compiler->burnout_flag)
 			break;
 		refactoring(coder, coder->compiler->t_refactor);
-		if (!coder->compiler->stop_flag)
+		if (coder->compiler->burnout_flag)
 			break;
 		debugging(coder, coder->compiler->t_debug);
 	}

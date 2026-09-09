@@ -69,7 +69,6 @@ static int    coder_initializer(int n_coders, t_coder **coders, t_compiler *comp
 			return (1);
 		coders[i]->id = i + 1;
         coders[i]->last_compile = 0;
-        coders[i]->i = 0;
 		coders[i]->pos = 0;
 		coders[i]->compiles = 0;
         coders[i]->compiler = compiler;
@@ -82,14 +81,15 @@ static int    coder_initializer(int n_coders, t_coder **coders, t_compiler *comp
 int	compiler_initializer(t_compiler *compiler, char **av)
 {
     compiler->n_coders = atoi(av[1]);
-    compiler->t_compile = atoi(av[2]);
-    compiler->t_burnout = atoi(av[3]);
+    compiler->t_burnout = atoi(av[2]);
+    compiler->t_compile = atoi(av[3]);
     compiler->t_debug = atoi(av[4]);
     compiler->t_refactor = atoi(av[5]);
     compiler->n_compiles = atoi(av[6]);
     compiler->d_cooldown = atoi(av[7]);
     compiler->scheduler = av[8];
     compiler->stop_flag = false;
+	compiler->burnout_flag = false;
 	compiler->start = 0;
 	pthread_mutex_init(&compiler->m_monitor, NULL);
 	pthread_cond_init(&compiler->c_monitor, NULL);

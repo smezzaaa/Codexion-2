@@ -28,15 +28,9 @@ static t_coder	*edf_scheduler(t_coder *a, t_coder *b)
 static t_coder	*fifo_scheduler(t_coder *a, t_coder *b)
 {
 	if (a->pos < b->pos)
-	{
-		//printf("%d came before %d\n", a->id, b->id);
 		return (a);
-	}
 	else if (a->pos > b->pos)
-	{
-		//printf("%d came before %d\n", b->id, a->id);
 		return (b);
-	}
 	else
 		return (edf_scheduler(a, b));
 }
@@ -73,8 +67,7 @@ bool	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown)
 		if (coder->compiler->stop_flag)
 		{
 			pthread_mutex_unlock(&dongle->d_mutex);
-			if (coder->compiler->stop_flag)
-				return (false);
+			return (false);
 		}
 	}
 	dongle->available = false;

@@ -47,7 +47,6 @@ typedef struct s_coder
 {
 	int			id;
 	int			compiles;
-	int			i;
 	int			pos;
 	long long int	last_compile;
 	t_dongle	*r_dongle;
@@ -67,6 +66,7 @@ typedef struct s_compiler
 	long long int		d_cooldown;
 	char			*scheduler;
 	bool			stop_flag;
+	bool			burnout_flag;
 	long long int		start;
 	t_coder			**coders;
 	t_dongle		**dongles;
