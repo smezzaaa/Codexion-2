@@ -58,8 +58,8 @@ bool	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown)
 	struct timeval	now;
 	struct timespec	ts;
 
-	//if ((coder->compiles == 0) && (coder->id % 2 == 0))
-	//	usleep(200);
+	if ((coder->compiles == 0) && (coder->id % 2 == 0))
+		usleep(500);
 	pthread_mutex_lock(&dongle->d_mutex);
 	push_coder(dongle, coder);
 	while (!((getfirst(dongle) == coder) && dongle->available
@@ -81,6 +81,10 @@ bool	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown)
 			return (false);
 		}
 	}
+	if (dongle == coder->r_dongle)
+		printf("%lld %d has taken right dongle\n", gettime(coder->compiler->start), coder->id);
+	else
+		printf("%lld %d has taken left dongle\n", gettime(coder->compiler->start), coder->id);
 	dongle->available = false;
 	pop_coder(dongle->pq, coder, dongle);
 	pthread_mutex_unlock(&dongle->d_mutex);

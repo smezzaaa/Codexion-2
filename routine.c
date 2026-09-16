@@ -42,11 +42,11 @@ static t_dongle	*get_first_dongle(t_coder *coder)
 {
     if (coder->l_dongle->id < coder->r_dongle->id)
 	{
-		printf("%lld %d has taken left dongle\n", gettime(coder->compiler->start), coder->id);
+		//printf("%lld %d has taken left dongle\n", gettime(coder->compiler->start), coder->id);
         return (coder->l_dongle);
 	}
 	else
-		printf("%lld %d has taken right dongle\n", gettime(coder->compiler->start), coder->id);
+		//printf("%lld %d has taken right dongle\n", gettime(coder->compiler->start), coder->id);
     return (coder->r_dongle);
 }
 
@@ -54,11 +54,11 @@ static t_dongle	*get_second_dongle(t_coder *coder)
 {
     if (coder->l_dongle->id < coder->r_dongle->id)
 	{
-		printf("%lld %d has taken right dongle\n", gettime(coder->compiler->start), coder->id);
+		//printf("%lld %d has taken right dongle\n", gettime(coder->compiler->start), coder->id);
         return (coder->r_dongle);
 	}
 	else
-		printf("%lld %d has taken left dongle\n", gettime(coder->compiler->start), coder->id);
+		//printf("%lld %d has taken left dongle\n", gettime(coder->compiler->start), coder->id);
     return (coder->l_dongle);
 }
 
