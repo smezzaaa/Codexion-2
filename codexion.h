@@ -75,10 +75,11 @@ typedef struct s_compiler
 	pthread_cond_t	c_monitor;
 } t_compiler;
 
-bool			parser(char **av);
+bool		parser(char **av);
 int			compiler_initializer(t_compiler *compiler, char **av);
 bool		create_threads(t_coder **coders, int n_coders);
 void		*coder_routine(void *arg);
+void		*one_coder_routine(void *arg);
 bool		take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown);
 void		ft_cleanup(int n_coders, t_compiler *compiler);
 long long	gettime(long long start);

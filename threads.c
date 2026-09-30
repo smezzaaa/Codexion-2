@@ -17,6 +17,12 @@ bool	create_threads(t_coder **coders, int n_coders)
 	int	i;
 
 	i = 0;
+	if (n_coders == 1)
+	{
+		if (pthread_create(&coders[i]->t, NULL, one_coder_routine, coders[i]) != 0)
+			return (false);
+		return (true);
+	}
 	while (i < n_coders)
 	{
 		if (pthread_create(&coders[i]->t, NULL, coder_routine, coders[i]) != 0)

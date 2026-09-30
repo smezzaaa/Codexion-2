@@ -87,8 +87,8 @@ void	*coder_routine(void *arg)
 		release_dongle(coder->l_dongle, coder->compiler->start);
 		release_dongle(coder->r_dongle, coder->compiler->start);
 		if (coder->compiler->burnout_flag)
-		break;
-			debugging(coder, coder->compiler->t_debug);
+			break;
+		debugging(coder, coder->compiler->t_debug);
 		if (coder->compiler->burnout_flag)
 			break;
 		refactoring(coder, coder->compiler->t_refactor);

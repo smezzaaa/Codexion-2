@@ -18,7 +18,7 @@ CFLAGS		= -Wall -Wextra -Werror -g
 LDFLAGS		= -lpthread
 
 SRCS		= initializer.c main.c parser.c priority_queue.c \
-				utils.c threads.c routine.c acquire_dongle.c monitor.c
+				utils.c threads.c routine.c acquire_dongle.c monitor.c edge_case_routine.c
 OBJS		= $(SRCS:.c=.o)
 
 HEADER		= codexion.h
