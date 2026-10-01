@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 15:53:14 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/31 15:31:14 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/01 11:59:28 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static bool	check_n_compiles(t_coder **coders)
 {
-	int	i;
+	int			i;
 	long long	compiles;
 
 	i = 0;
@@ -30,18 +30,18 @@ static bool	check_n_compiles(t_coder **coders)
 
 static bool	check_burnout(t_coder **coders)
 {
-	int	i;
+	int			i;
 	long long	burnout;
 
 	i = 0;
 	burnout = coders[0]->compiler->t_burnout;
 	while (coders[i])
 	{
-		if ((coders[i]->last_compile + burnout) <= gettime(coders[i]->compiler->start))
+		if ((coders[i]->last_compile + burnout)
+			<= gettime(coders[i]->compiler->start))
 		{
-			//printf("%d last compile: %lld\n", coders[i]->id, coders[i]->last_compile);
-			//printf("last compile + burnout: %lld\n", coders[i]->last_compile + burnout);
-			printf("%lld %d burned out\n", gettime(coders[i]->compiler->start), coders[i]->id);
+			printf("%lld %d burned out\n",
+				gettime(coders[i]->compiler->start), coders[i]->id);
 			return (true);
 		}
 		i++;
@@ -54,7 +54,7 @@ static void	stop_simulation(t_dongle **dongles)
 	int	i;
 
 	i = 0;
-	while(dongles[i])
+	while (dongles[i])
 	{
 		pthread_mutex_lock(&dongles[i]->d_mutex);
 		pthread_cond_broadcast(&dongles[i]->d_cond);
@@ -77,16 +77,15 @@ void	*monitor(void *arg)
 			compiler->stop_flag = true;
 			stop_simulation(compiler->dongles);
 			pthread_mutex_unlock(&compiler->m_monitor);
-			break;
+			break ;
 		}
-
 		if (check_n_compiles(compiler->coders))
 		{
 			pthread_mutex_lock(&compiler->m_monitor);
 			compiler->stop_flag = true;
 			stop_simulation(compiler->dongles);
 			pthread_mutex_unlock(&compiler->m_monitor);
-			break;
+			break ;
 		}
 		usleep(500);
 	}

@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 11:12:46 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/29 14:21:13 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/01 12:01:04 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ bool	create_threads(t_coder **coders, int n_coders)
 	i = 0;
 	if (n_coders == 1)
 	{
-		if (pthread_create(&coders[i]->t, NULL, one_coder_routine, coders[i]) != 0)
+		if (pthread_create(
+				&coders[i]->t, NULL, one_coder_routine, coders[i]) != 0)
 			return (false);
 		return (true);
 	}

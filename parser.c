@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/19 17:58:02 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/20 17:35:38 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/01 11:59:51 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ bool	parser(char **av)
 {
 	if (!av || !av[1] || !av[2] || !av[3] || !av[4]
 		|| !av[5] || !av[6] || !av[7] || !av[8])
-        return (false);
+		return (false);
 	if ((atoi(av[1]) < 0) || (atoi(av[1]) == 0))
 		return (false);
 	if ((atoi(av[2]) < 0) || (atoi(av[2]) == 0))

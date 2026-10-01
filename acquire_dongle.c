@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/27 20:22:50 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/07/31 15:04:01 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/01 11:43:37 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ static t_coder	*fifo_scheduler(t_coder *a, t_coder *b)
 
 static t_coder	*getfirst(t_dongle *dongle)
 {
+	t_coder	*a;
+	t_coder	*b;
+
 	if (dongle->req == 0)
 		return (NULL);
 	if (dongle->req == 1)
 		return (dongle->pq->arr[0]);
-	t_coder	*a;
-	t_coder	*b;
-
 	a = dongle->pq->arr[0];
 	b = dongle->pq->arr[1];
 	if (strcmp(a->compiler->scheduler, "fifo") == 0)
@@ -53,38 +53,37 @@ static t_coder	*getfirst(t_dongle *dongle)
 	return (NULL);
 }
 
+static void	takedongle_timestamp(t_coder *coder, t_dongle *dongle)
+{
+	if (dongle == coder->r_dongle)
+		printf("%lld %d has taken right dongle\n",
+			gettime(coder->compiler->start), coder->id);
+	else
+		printf("%lld %d has taken left dongle\n",
+			gettime(coder->compiler->start), coder->id);
+}
+
 bool	take_dongles(t_coder *coder, t_dongle *dongle, long int d_cooldown)
 {
-	struct timeval	now;
-	struct timespec	ts;
+	struct timespec	deadline;
 
-	if ((coder->compiles == 0) && (coder->id % 2 == 0))
-		usleep(500);
 	pthread_mutex_lock(&dongle->d_mutex);
 	push_coder(dongle, coder);
 	while (!((getfirst(dongle) == coder) && dongle->available
-			&& ((dongle->last_release + d_cooldown) < gettime(coder->compiler->start)
-			|| (dongle->last_release == 0))) && (!coder->compiler->stop_flag))
+			&& ((dongle->last_release + d_cooldown)
+				< gettime(coder->compiler->start)
+				|| (dongle->last_release == 0)))
+		&& (!coder->compiler->stop_flag))
 	{
-		gettimeofday(&now, NULL);
-		ts.tv_sec = now.tv_sec;
-		ts.tv_nsec = (now.tv_usec + 5000) * 1000;
-		if (ts.tv_nsec >= 1000000000)
-		{
-			ts.tv_sec += 1;
-			ts.tv_nsec -= 1000000000;
-		}
-		pthread_cond_timedwait(&dongle->d_cond, &dongle->d_mutex, &ts);
+		deadline = ft_timer();
+		pthread_cond_timedwait(&dongle->d_cond, &dongle->d_mutex, &deadline);
 		if (coder->compiler->stop_flag)
 		{
 			pthread_mutex_unlock(&dongle->d_mutex);
 			return (false);
 		}
 	}
-	if (dongle == coder->r_dongle)
-		printf("%lld %d has taken right dongle\n", gettime(coder->compiler->start), coder->id);
-	else
-		printf("%lld %d has taken left dongle\n", gettime(coder->compiler->start), coder->id);
+	takedongle_timestamp(coder, dongle);
 	dongle->available = false;
 	pop_coder(dongle->pq, coder, dongle);
 	pthread_mutex_unlock(&dongle->d_mutex);
