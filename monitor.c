@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 15:53:14 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/10/01 11:59:28 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/03 12:21:09 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ static bool	check_burnout(t_coder **coders)
 	while (coders[i])
 	{
 		if ((coders[i]->last_compile + burnout)
-			<= gettime(coders[i]->compiler->start))
+			<= gettime(coders[i]->compiler->start)
+			&& coders[i]->compiles < coders[i]->compiler->n_compiles)
 		{
 			printf("%lld %d burned out\n",
 				gettime(coders[i]->compiler->start), coders[i]->id);
