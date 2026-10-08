@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/01 09:51:00 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/10/01 12:03:54 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/08 11:07:42 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,21 @@
 
 bool	compiling(t_coder *coder, long int t_compile)
 {
+	pthread_mutex_lock(&coder->m_coder);
 	coder->last_compile = gettime(coder->compiler->start);
-	printf("%lld %d is compiling\n",
-		gettime(coder->compiler->start), coder->id);
+	pthread_mutex_unlock(&coder->m_coder);
+	log_state(coder, "is compiling");
 	if (usleep(t_compile * 1000) != 0)
 		return (false);
+	pthread_mutex_lock(&coder->m_coder);
 	coder->compiles += 1;
+	pthread_mutex_unlock(&coder->m_coder);
 	return (true);
 }
 
 bool	refactoring(t_coder *coder, long int t_refactor)
 {
-	printf("%lld %d is refactoring\n",
-		gettime(coder->compiler->start), coder->id);
+	log_state(coder, "is refactoring");
 	if (usleep(t_refactor * 1000) != 0)
 		return (false);
 	return (true);
@@ -34,19 +36,23 @@ bool	refactoring(t_coder *coder, long int t_refactor)
 
 bool	debugging(t_coder *coder, long int t_debug)
 {
-	printf("%lld %d is debugging\n",
-		gettime(coder->compiler->start), coder->id);
+	log_state(coder, "is debugging");
 	if (usleep(t_debug * 1000) != 0)
 		return (false);
 	return (true);
 }
 
-bool	release_dongle(t_dongle	*dongle, long int start)
+bool	release_dongle(t_coder *coder, long int start)
 {
-	pthread_mutex_lock(&dongle->d_mutex);
-	dongle->available = true;
-	dongle->last_release = gettime(start);
-	pthread_cond_broadcast(&dongle->d_cond);
-	pthread_mutex_unlock(&dongle->d_mutex);
+	pthread_mutex_lock(&coder->l_dongle->d_mutex);
+	coder->l_dongle->available = true;
+	coder->l_dongle->last_release = gettime(start);
+	pthread_cond_broadcast(&coder->l_dongle->d_cond);
+	pthread_mutex_unlock(&coder->l_dongle->d_mutex);
+	pthread_mutex_lock(&coder->r_dongle->d_mutex);
+	coder->r_dongle->available = true;
+	coder->r_dongle->last_release = gettime(start);
+	pthread_cond_broadcast(&coder->r_dongle->d_cond);
+	pthread_mutex_unlock(&coder->r_dongle->d_mutex);
 	return (true);
 }

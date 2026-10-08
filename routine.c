@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/22 11:36:31 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/10/03 12:49:23 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/08 11:32:40 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,10 @@ void	*coder_routine(void *arg)
 	t_coder	*coder;
 
 	coder = (t_coder *)arg;
-	while (!coder->compiler->stop_flag)
+	while (!is_stopped(coder->compiler))
 	{
 		if (coder->id % 2 != 0 && coder->compiles == 0)
-			usleep(50);
-		if (coder->compiles == coder->compiler->n_compiles)
-			break ;
+			usleep(500);
 		if (!take_dongles(coder,
 				get_first_dongle(coder), coder->compiler->d_cooldown))
 			return (NULL);
@@ -50,14 +48,15 @@ void	*coder_routine(void *arg)
 				get_second_dongle(coder), coder->compiler->d_cooldown))
 			return (NULL);
 		compiling(coder, coder->compiler->t_compile);
-		release_dongle(coder->l_dongle, coder->compiler->start);
-		release_dongle(coder->r_dongle, coder->compiler->start);
-		if (coder->compiler->burnout_flag)
+		release_dongle(coder, coder->compiler->start);
+		if (is_stopped(coder->compiler))
 			break ;
 		debugging(coder, coder->compiler->t_debug);
-		if (coder->compiler->burnout_flag)
+		if (is_stopped(coder->compiler))
 			break ;
 		refactoring(coder, coder->compiler->t_refactor);
+		if (coder->compiles == coder->compiler->n_compiles)
+			break ;
 	}
 	return (NULL);
 }

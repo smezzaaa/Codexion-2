@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/20 19:26:57 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/10/01 12:03:01 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/08 11:30:35 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ void	safe_free(void *ptr)
 void	close_simulation(t_compiler *compiler)
 {
 	pthread_join(compiler->t_monitor, NULL);
-	pthread_mutex_destroy(&compiler->m_monitor);
-	pthread_cond_destroy(&compiler->c_monitor);
+	pthread_mutex_destroy(&compiler->m_log);
 }
 
 void	ft_cleanup(int n_coders, t_compiler *compiler)
@@ -61,11 +60,12 @@ void	ft_cleanup(int n_coders, t_compiler *compiler)
 	i = 0;
 	while (i < n_coders)
 	{
+		pthread_mutex_destroy(&compiler->dongles[i]->d_mutex);
+		pthread_mutex_destroy(&compiler->coders[i]->m_coder);
+		pthread_cond_destroy(&compiler->dongles[i]->d_cond);
 		safe_free(compiler->coders[i]);
 		safe_free(compiler->dongles[i]->pq->arr);
 		safe_free(compiler->dongles[i]->pq);
-		pthread_mutex_destroy(&compiler->dongles[i]->d_mutex);
-		pthread_cond_destroy(&compiler->dongles[i]->d_cond);
 		safe_free(compiler->dongles[i]);
 		i++;
 	}

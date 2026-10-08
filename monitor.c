@@ -6,48 +6,52 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 15:53:14 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/10/03 12:21:09 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/08 11:28:51 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static bool	check_n_compiles(t_coder **coders)
+static bool	check_n_compiles(t_compiler *compiler, t_coder **coders)
 {
-	int			i;
-	long long	compiles;
+	int	i;
+	int	done;
 
 	i = 0;
-	compiles = coders[0]->compiler->n_compiles;
 	while (coders[i])
 	{
-		if (coders[i]->compiles < compiles)
+		pthread_mutex_lock(&coders[i]->m_coder);
+		done = coders[i]->compiles;
+		pthread_mutex_unlock(&coders[i]->m_coder);
+		if (done < compiler->n_compiles)
 			return (false);
 		i++;
 	}
 	return (true);
 }
 
-static bool	check_burnout(t_coder **coders)
+static int	check_burnout(t_compiler *c, t_coder **coders)
 {
 	int			i;
-	long long	burnout;
+	long long	last_c;
+	int			done;
 
 	i = 0;
-	burnout = coders[0]->compiler->t_burnout;
 	while (coders[i])
 	{
-		if ((coders[i]->last_compile + burnout)
+		pthread_mutex_lock(&coders[i]->m_coder);
+		last_c = coders[i]->last_compile;
+		done = coders[i]->compiles;
+		pthread_mutex_unlock(&coders[i]->m_coder);
+		if (last_c + c->t_burnout
 			<= gettime(coders[i]->compiler->start)
-			&& coders[i]->compiles < coders[i]->compiler->n_compiles)
+			&& done < c->n_compiles)
 		{
-			printf("%lld %d burned out\n",
-				gettime(coders[i]->compiler->start), coders[i]->id);
-			return (true);
+			return (coders[i]->id);
 		}
 		i++;
 	}
-	return (false);
+	return (0);
 }
 
 static void	stop_simulation(t_dongle **dongles)
@@ -67,25 +71,22 @@ static void	stop_simulation(t_dongle **dongles)
 void	*monitor(void *arg)
 {
 	t_compiler	*compiler;
+	int			id;
 
 	compiler = (t_compiler *)arg;
 	while (1)
 	{
-		if (check_burnout(compiler->coders))
+		id = check_burnout(compiler, compiler->coders);
+		if (id)
 		{
-			pthread_mutex_lock(&compiler->m_monitor);
-			compiler->burnout_flag = true;
-			compiler->stop_flag = true;
+			declare_burnout(compiler, id);
 			stop_simulation(compiler->dongles);
-			pthread_mutex_unlock(&compiler->m_monitor);
 			break ;
 		}
-		if (check_n_compiles(compiler->coders))
+		if (check_n_compiles(compiler, compiler->coders))
 		{
-			pthread_mutex_lock(&compiler->m_monitor);
-			compiler->stop_flag = true;
+			set_stop(compiler);
 			stop_simulation(compiler->dongles);
-			pthread_mutex_unlock(&compiler->m_monitor);
 			break ;
 		}
 		usleep(500);

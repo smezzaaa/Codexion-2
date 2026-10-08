@@ -1,0 +1,131 @@
+==770898== Helgrind, a thread error detector
+==770898== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==770898== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==770898== Command: ./codexion 5 3000 200 200 200 5 400 fifo
+==770898== Parent PID: 557869
+==770898== 
+==770898== ---Thread-Announcement------------------------------------------
+==770898== 
+==770898== Thread #3 was created
+==770898==    at 0x49A5A83: clone (clone.S:76)
+==770898==    by 0x49A697E: __clone_internal (clone-internal.c:83)
+==770898==    by 0x4914698: create_thread (pthread_create.c:295)
+==770898==    by 0x49151BF: pthread_create@@GLIBC_2.34 (pthread_create.c:828)
+==770898==    by 0x4853767: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4021C4: create_threads (threads.c:31)
+==770898==    by 0x401910: main (main.c:32)
+==770898== 
+==770898== ----------------------------------------------------------------
+==770898== 
+==770898== Thread #3: pthread_cond_{signal,broadcast}: dubious: associated lock is not held by any thread
+==770898==    at 0x48513D6: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4913FEE: __pthread_cond_wait_common (pthread_cond_wait.c:516)
+==770898==    by 0x4913FEE: pthread_cond_timedwait@@GLIBC_2.3.2 (pthread_cond_wait.c:652)
+==770898==    by 0x48545D4: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x40265F: take_dongles (acquire_dongle.c:91)
+==770898==    by 0x4022D7: coder_routine (routine.c:44)
+==770898==    by 0x485396A: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4914A82: start_thread (pthread_create.c:442)
+==770898==    by 0x49A5A93: clone (clone.S:100)
+==770898== 
+==770898== ---Thread-Announcement------------------------------------------
+==770898== 
+==770898== Thread #7 was created
+==770898==    at 0x49A5A83: clone (clone.S:76)
+==770898==    by 0x49A697E: __clone_internal (clone-internal.c:83)
+==770898==    by 0x4914698: create_thread (pthread_create.c:295)
+==770898==    by 0x49151BF: pthread_create@@GLIBC_2.34 (pthread_create.c:828)
+==770898==    by 0x4853767: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4021C4: create_threads (threads.c:31)
+==770898==    by 0x401910: main (main.c:32)
+==770898== 
+==770898== ----------------------------------------------------------------
+==770898== 
+==770898== Thread #7: pthread_cond_{signal,broadcast}: dubious: associated lock is not held by any thread
+==770898==    at 0x48513D6: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4913FEE: __pthread_cond_wait_common (pthread_cond_wait.c:516)
+==770898==    by 0x4913FEE: pthread_cond_timedwait@@GLIBC_2.3.2 (pthread_cond_wait.c:652)
+==770898==    by 0x48545D4: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x40265F: take_dongles (acquire_dongle.c:91)
+==770898==    by 0x402315: coder_routine (routine.c:47)
+==770898==    by 0x485396A: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4914A82: start_thread (pthread_create.c:442)
+==770898==    by 0x49A5A93: clone (clone.S:100)
+==770898== 
+==770898== ---Thread-Announcement------------------------------------------
+==770898== 
+==770898== Thread #6 was created
+==770898==    at 0x49A5A83: clone (clone.S:76)
+==770898==    by 0x49A697E: __clone_internal (clone-internal.c:83)
+==770898==    by 0x4914698: create_thread (pthread_create.c:295)
+==770898==    by 0x49151BF: pthread_create@@GLIBC_2.34 (pthread_create.c:828)
+==770898==    by 0x4853767: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4021C4: create_threads (threads.c:31)
+==770898==    by 0x401910: main (main.c:32)
+==770898== 
+==770898== ----------------------------------------------------------------
+==770898== 
+==770898== Thread #6: pthread_cond_{signal,broadcast}: dubious: associated lock is not held by any thread
+==770898==    at 0x48513D6: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4913FEE: __pthread_cond_wait_common (pthread_cond_wait.c:516)
+==770898==    by 0x4913FEE: pthread_cond_timedwait@@GLIBC_2.3.2 (pthread_cond_wait.c:652)
+==770898==    by 0x48545D4: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x40265F: take_dongles (acquire_dongle.c:91)
+==770898==    by 0x4022D7: coder_routine (routine.c:44)
+==770898==    by 0x485396A: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4914A82: start_thread (pthread_create.c:442)
+==770898==    by 0x49A5A93: clone (clone.S:100)
+==770898== 
+==770898== ---Thread-Announcement------------------------------------------
+==770898== 
+==770898== Thread #4 was created
+==770898==    at 0x49A5A83: clone (clone.S:76)
+==770898==    by 0x49A697E: __clone_internal (clone-internal.c:83)
+==770898==    by 0x4914698: create_thread (pthread_create.c:295)
+==770898==    by 0x49151BF: pthread_create@@GLIBC_2.34 (pthread_create.c:828)
+==770898==    by 0x4853767: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4021C4: create_threads (threads.c:31)
+==770898==    by 0x401910: main (main.c:32)
+==770898== 
+==770898== ----------------------------------------------------------------
+==770898== 
+==770898== Thread #4: pthread_cond_{signal,broadcast}: dubious: associated lock is not held by any thread
+==770898==    at 0x48513D6: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4913FEE: __pthread_cond_wait_common (pthread_cond_wait.c:516)
+==770898==    by 0x4913FEE: pthread_cond_timedwait@@GLIBC_2.3.2 (pthread_cond_wait.c:652)
+==770898==    by 0x48545D4: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x40265F: take_dongles (acquire_dongle.c:91)
+==770898==    by 0x4022D7: coder_routine (routine.c:44)
+==770898==    by 0x485396A: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4914A82: start_thread (pthread_create.c:442)
+==770898==    by 0x49A5A93: clone (clone.S:100)
+==770898== 
+==770898== ---Thread-Announcement------------------------------------------
+==770898== 
+==770898== Thread #5 was created
+==770898==    at 0x49A5A83: clone (clone.S:76)
+==770898==    by 0x49A697E: __clone_internal (clone-internal.c:83)
+==770898==    by 0x4914698: create_thread (pthread_create.c:295)
+==770898==    by 0x49151BF: pthread_create@@GLIBC_2.34 (pthread_create.c:828)
+==770898==    by 0x4853767: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4021C4: create_threads (threads.c:31)
+==770898==    by 0x401910: main (main.c:32)
+==770898== 
+==770898== ----------------------------------------------------------------
+==770898== 
+==770898== Thread #5: pthread_cond_{signal,broadcast}: dubious: associated lock is not held by any thread
+==770898==    at 0x48513D6: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4913FEE: __pthread_cond_wait_common (pthread_cond_wait.c:516)
+==770898==    by 0x4913FEE: pthread_cond_timedwait@@GLIBC_2.3.2 (pthread_cond_wait.c:652)
+==770898==    by 0x48545D4: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x40265F: take_dongles (acquire_dongle.c:91)
+==770898==    by 0x402315: coder_routine (routine.c:47)
+==770898==    by 0x485396A: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
+==770898==    by 0x4914A82: start_thread (pthread_create.c:442)
+==770898==    by 0x49A5A93: clone (clone.S:100)
+==770898== 
+==770898== 
+==770898== Use --history-level=approx or =none to gain increased speed, at
+==770898== the cost of reduced accuracy of conflicting-access information
+==770898== For lists of detected and suppressed errors, rerun with: -s
+==770898== ERROR SUMMARY: 9 errors from 5 contexts (suppressed: 147772 from 159)

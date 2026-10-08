@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/19 17:24:42 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/10/01 11:47:13 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/08 11:31:56 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_coder
 	t_dongle		*r_dongle;
 	t_dongle		*l_dongle;
 	pthread_t		t;
+	pthread_mutex_t	m_coder;
 	t_compiler		*compiler;
 }	t_coder;
 
@@ -66,13 +67,14 @@ typedef struct s_compiler
 	long long int	d_cooldown;
 	char			*scheduler;
 	bool			stop_flag;
-	bool			burnout_flag;
+	//bool			burnout_flag;
 	long long int	start;
 	t_coder			**coders;
 	t_dongle		**dongles;
 	pthread_t		t_monitor;
-	pthread_mutex_t	m_monitor;
-	pthread_cond_t	c_monitor;
+	pthread_mutex_t	m_log;
+	//pthread_mutex_t	m_monitor;
+	//pthread_cond_t	c_monitor;
 }	t_compiler;
 
 bool			parser(char **av);
@@ -83,9 +85,9 @@ void			*one_coder_routine(void *arg);
 bool			compiling(t_coder *coder, long int t_compile);
 bool			refactoring(t_coder *coder, long int t_refactor);
 bool			debugging(t_coder *coder, long int t_debug);
-bool			release_dongle(t_dongle	*dongle, long int start);
-bool			take_dongles(t_coder *coder,
-					t_dongle *dongle, long int d_cooldown);
+bool			release_dongle(t_coder	*coder, long int start);
+bool			take_dongles(t_coder *c,
+					t_dongle *d, long int d_cooldown);
 void			ft_cleanup(int n_coders, t_compiler *compiler);
 void			close_simulation(t_compiler *compiler);
 long long		gettime(long long start);
@@ -94,6 +96,11 @@ bool			create_pq(t_heap *pq);
 void			swap_pq(t_heap *pq);
 void			push_coder(t_dongle *dongle, t_coder *coder);
 void			pop_coder(t_heap *pq, t_coder *coder, t_dongle *dongle);
+t_coder			*edf_scheduler(t_coder *a, t_coder *b);
 void			*monitor(void *arg);
+bool			is_stopped(t_compiler *c);
+void			declare_burnout(t_compiler *c, int id);
+void			set_stop(t_compiler *c);
+void			log_state(t_coder *coder, char *mess);
 
 #endif

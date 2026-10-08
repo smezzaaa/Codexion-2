@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/01 09:01:02 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/10/01 12:15:40 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/08 11:36:41 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 
 void	*one_coder_routine(void *arg)
 {
-	t_coder	*coder;
+	t_coder		*coder;
+	t_dongle	*d;
 
 	coder = (t_coder *)arg;
-	while (!coder->compiler->burnout_flag)
-	{
-		pthread_cond_wait(&coder->compiler->dongles[0]->d_cond,
-			&coder->compiler->dongles[0]->d_mutex);
-	}
+	d = coder->r_dongle;
+	pthread_mutex_lock(&d->d_mutex);
+	while (!is_stopped(coder->compiler))
+		pthread_cond_wait(&d->d_cond, &d->d_mutex);
+	pthread_mutex_unlock(&d->d_mutex);
 	return (NULL);
 }

@@ -19,11 +19,11 @@ static void	assign_dongle(int n_coders, t_coder **coders, t_dongle **dongles)
 	i = 0;
 	while (i < n_coders)
 	{
-		coders[i]->l_dongle = dongles[i];
+		coders[i]->r_dongle = dongles[i];
 		if (coders[i]->id == n_coders)
-			coders[i]->r_dongle = dongles[0];
+			coders[i]->l_dongle = dongles[0];
 		else
-			coders[i]->r_dongle = dongles[i + 1];
+			coders[i]->l_dongle = dongles[i + 1];
 		i++;
 	}
 }
@@ -73,6 +73,7 @@ static bool	coder_initializer(int n_coders,
 		coders[i]->pos = 0;
 		coders[i]->compiles = 0;
 		coders[i]->compiler = compiler;
+		pthread_mutex_init(&coders[i]->m_coder, NULL);
 		i++;
 	}
 	assign_dongle(n_coders, coders, compiler->dongles);
@@ -95,10 +96,11 @@ bool	compiler_initializer(t_compiler *compiler, char **av)
 {
 	input_var(compiler, av);
 	compiler->stop_flag = false;
-	compiler->burnout_flag = false;
+	//compiler->burnout_flag = false;
 	compiler->start = 0;
-	pthread_mutex_init(&compiler->m_monitor, NULL);
-	pthread_cond_init(&compiler->c_monitor, NULL);
+	//pthread_mutex_init(&compiler->m_monitor, NULL);
+	pthread_mutex_init(&compiler->m_log, NULL);
+	//pthread_cond_init(&compiler->c_monitor, NULL);
 	compiler->dongles = (t_dongle **)malloc(sizeof(t_dongle *)
 			* (size_t)(compiler->n_coders + 1));
 	if (!compiler->dongles)
