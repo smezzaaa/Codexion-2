@@ -14,22 +14,22 @@
 
 static t_dongle	*get_first_dongle(t_coder *coder)
 {
-	if (coder->id % 2 != 0)
-		return(coder->l_dongle);
-	return(coder->r_dongle);
-	//if (coder->l_dongle->id < coder->r_dongle->id)
-	//	return (coder->l_dongle);
-	//return (coder->r_dongle);
+	//if (coder->id % 2 != 0)
+	//	return(coder->l_dongle);
+	//return(coder->r_dongle);
+	if (coder->l_dongle->id < coder->r_dongle->id)
+		return (coder->l_dongle);
+	return (coder->r_dongle);
 }
 
 static t_dongle	*get_second_dongle(t_coder *coder)
 {
-	if (coder->id % 2 != 0)
-		return(coder->r_dongle);
-	return(coder->l_dongle);
-	//if (coder->l_dongle->id < coder->r_dongle->id)
-	//	return (coder->r_dongle);
-	//return (coder->l_dongle);
+	//if (coder->id % 2 != 0)
+	//	return(coder->r_dongle);
+	//return(coder->l_dongle);
+	if (coder->l_dongle->id < coder->r_dongle->id)
+		return (coder->r_dongle);
+	return (coder->l_dongle);
 }
 
 void	*coder_routine(void *arg)
@@ -42,11 +42,11 @@ void	*coder_routine(void *arg)
 		if (coder->id % 2 != 0 && coder->compiles == 0)
 			usleep(500);
 		if (!take_dongles(coder,
-				get_first_dongle(coder), coder->compiler->d_cooldown))
+				get_first_dongle(coder), get_second_dongle(coder)))
 			return (NULL);
-		if (!take_dongles(coder,
-				get_second_dongle(coder), coder->compiler->d_cooldown))
-			return (NULL);
+		//if (!take_dongles(coder,
+		//		get_second_dongle(coder), coder->compiler->d_cooldown))
+		//	return (NULL);
 		compiling(coder, coder->compiler->t_compile);
 		release_dongle(coder, coder->compiler->start);
 		if (is_stopped(coder->compiler))

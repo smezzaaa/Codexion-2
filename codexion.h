@@ -86,8 +86,7 @@ bool			compiling(t_coder *coder, long int t_compile);
 bool			refactoring(t_coder *coder, long int t_refactor);
 bool			debugging(t_coder *coder, long int t_debug);
 bool			release_dongle(t_coder	*coder, long int start);
-bool			take_dongles(t_coder *c,
-					t_dongle *d, long int d_cooldown);
+bool			take_dongles(t_coder *c,t_dongle *first, t_dongle *second);
 void			ft_cleanup(int n_coders, t_compiler *compiler);
 void			close_simulation(t_compiler *compiler);
 long long		gettime(long long start);

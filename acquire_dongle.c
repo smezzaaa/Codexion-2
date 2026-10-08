@@ -12,67 +12,14 @@
 
 #include "codexion.h"
 
-t_coder	*edf_scheduler(t_coder *a, t_coder *b)
+static void	push_pair(t_coder *c, t_dongle *f, t_dongle *s)
 {
-	long long	a_deadline;
-	long long	b_deadline;
-
-	pthread_mutex_lock(&a->m_coder);
-	a_deadline = a->last_compile + a->compiler->t_burnout;
-	pthread_mutex_unlock(&a->m_coder);
-	pthread_mutex_lock(&b->m_coder);
-	b_deadline = b->last_compile + b->compiler->t_burnout;
-	pthread_mutex_unlock(&b->m_coder);
-	if (a_deadline < b_deadline)
-		return (a);
-	if (a_deadline == b_deadline && a->id < b->id)
-		return (a);
-	return (b);
-}
-
-static t_coder	*fifo_scheduler(t_coder *a, t_coder *b)
-{
-	int	pos_a;
-	int	pos_b;
-
-	pthread_mutex_lock(&a->m_coder);
-	pos_a = a->pos;
-	pthread_mutex_unlock(&a->m_coder);
-	pthread_mutex_lock(&b->m_coder);
-	pos_b = b->pos;
-	pthread_mutex_unlock(&b->m_coder);
-	if (pos_a < pos_b)
-		return (a);
-	else
-		return (b);
-	// else
-	// 	return (edf_scheduler(a, b));
-}
-
-static t_coder	*getfirst(t_dongle *dongle)
-{
-	t_coder	*a;
-	t_coder	*b;
-
-	if (dongle->req == 0)
-		return (NULL);
-	if (dongle->req == 1)
-		return (dongle->pq->arr[0]);
-	a = dongle->pq->arr[0];
-	b = dongle->pq->arr[1];
-	if (strcmp(a->compiler->scheduler, "fifo") == 0)
-		return (fifo_scheduler(a, b));
-	else if (strcmp(a->compiler->scheduler, "edf") == 0)
-		return (edf_scheduler(a, b));
-	return (NULL);
-}
-
-static void	takedongle_timestamp(t_coder *coder, t_dongle *dongle)
-{
-	if (dongle == coder->r_dongle)
-		log_state(coder, "has taken right dongle");
-	else
-		log_state(coder, "has taken left dongle");
+	pthread_mutex_lock(&f->d_mutex);
+	pthread_mutex_lock(&s->d_mutex);
+	push_coder(f, c);
+	push_coder(s, c);
+	pthread_mutex_unlock(&s->d_mutex);
+	pthread_mutex_unlock(&f->d_mutex);
 }
 
 static bool	is_available(t_coder *c, t_dongle *d)
@@ -87,25 +34,36 @@ static bool	is_available(t_coder *c, t_dongle *d)
 	return (d->last_release + cool < gettime(c->compiler->start));
 }
 
-bool	take_dongles(t_coder *c, t_dongle *d, long int d_cooldown)
+static bool	acquire_dongle(t_coder *c, t_dongle *f, t_dongle *s)
 {
-	struct timespec	deadline;
+	bool	taken;
 
-	pthread_mutex_lock(&d->d_mutex);
-	push_coder(d, c);
-	while (!is_available(c, d))
+	taken = false;
+	pthread_mutex_lock(&f->d_mutex);
+	pthread_mutex_lock(&s->d_mutex);
+	if (is_available(c, f) && is_available(c, s))
 	{
-		deadline = ft_timer();
-		pthread_cond_timedwait(&d->d_cond, &d->d_mutex, &deadline);
-		if (is_stopped(c->compiler))
-		{
-			pthread_mutex_unlock(&d->d_mutex);
-			return (false);
-		}
+		f->available = false;
+		s->available = false;
+		pop_coder(f->pq, c, f);
+		pop_coder(s->pq, c, s);
+		log_state(c, "has taken a dongle");
+		log_state(c, "has taken a dongle");
+		taken = true;
 	}
-	takedongle_timestamp(c, d);
-	d->available = false;
-	pop_coder(d->pq, c, d);
-	pthread_mutex_unlock(&d->d_mutex);
-	return (true);
+	pthread_mutex_unlock(&s->d_mutex);
+	pthread_mutex_unlock(&f->d_mutex);
+	return (taken);
+}
+
+bool	take_dongles(t_coder *c, t_dongle *first, t_dongle *second)
+{
+	push_pair(c, first, second);
+	while (!is_stopped(c->compiler))
+	{
+		if (acquire_dongle(c, first, second))
+			return (true);
+		usleep (500);
+	}
+	return (false);
 }

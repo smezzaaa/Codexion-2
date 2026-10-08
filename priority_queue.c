@@ -12,6 +12,24 @@
 
 #include "codexion.h"
 
+t_coder	*edf_scheduler(t_coder *a, t_coder *b)
+{
+	long long	a_deadline;
+	long long	b_deadline;
+
+	pthread_mutex_lock(&a->m_coder);
+	a_deadline = a->last_compile + a->compiler->t_burnout;
+	pthread_mutex_unlock(&a->m_coder);
+	pthread_mutex_lock(&b->m_coder);
+	b_deadline = b->last_compile + b->compiler->t_burnout;
+	pthread_mutex_unlock(&b->m_coder);
+	if (a_deadline < b_deadline)
+		return (a);
+	if (a_deadline == b_deadline && a->id < b->id)
+		return (a);
+	return (b);
+}
+
 void	pop_coder(t_heap *pq, t_coder *coder, t_dongle *dongle)
 {
 	if (pq->arr[0] == coder)
@@ -21,31 +39,24 @@ void	pop_coder(t_heap *pq, t_coder *coder, t_dongle *dongle)
 	}
 	else
 		pq->arr[1] = NULL;
-	pthread_mutex_lock(&coder->m_coder);
-	coder->pos = 0;
-	pthread_mutex_unlock(&coder->m_coder);
 	dongle->req -= 1;
-	pthread_cond_broadcast(&dongle->d_cond);
 }
 
-void	push_coder(t_dongle *dongle, t_coder *coder)
+void	push_coder(t_dongle *dongle, t_coder *c)
 {
 	dongle->req++;
-	pthread_mutex_lock(&coder->m_coder);
-	coder->pos = dongle->next++;
-	pthread_mutex_unlock(&coder->m_coder);
 	if (!dongle->pq->arr[0])
-		dongle->pq->arr[0] = coder;
+		dongle->pq->arr[0] = c;
 	else
 	{
-		dongle->pq->arr[1] = coder;
-		if (strcmp(coder->compiler->scheduler, "edf") == 0)
+		dongle->pq->arr[1] = c;
+		if (strcmp(c->compiler->scheduler, "edf") == 0)
 		{
-			if (coder == edf_scheduler(coder, dongle->pq->arr[0]))
+			if (strcmp(c->compiler->scheduler, "edf") == 0
+				&& c == edf_scheduler(c, dongle->pq->arr[0]))
 				swap_pq(dongle->pq);
 		}
 	}
-	pthread_cond_broadcast(&dongle->d_cond);
 }
 
 void	swap_pq(t_heap *pq)
