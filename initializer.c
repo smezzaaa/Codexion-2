@@ -95,12 +95,10 @@ void	input_var(t_compiler *compiler, char **av)
 bool	compiler_initializer(t_compiler *compiler, char **av)
 {
 	input_var(compiler, av);
+	compiler->burnout_flag = false;
 	compiler->stop_flag = false;
-	//compiler->burnout_flag = false;
 	compiler->start = 0;
-	//pthread_mutex_init(&compiler->m_monitor, NULL);
 	pthread_mutex_init(&compiler->m_log, NULL);
-	//pthread_cond_init(&compiler->c_monitor, NULL);
 	compiler->dongles = (t_dongle **)malloc(sizeof(t_dongle *)
 			* (size_t)(compiler->n_coders + 1));
 	if (!compiler->dongles)

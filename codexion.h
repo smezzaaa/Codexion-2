@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/19 17:24:42 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/10/08 11:31:56 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/11 16:55:13 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_compiler
 	long long int	d_cooldown;
 	char			*scheduler;
 	bool			stop_flag;
-	//bool			burnout_flag;
+	bool			burnout_flag;
 	long long int	start;
 	t_coder			**coders;
 	t_dongle		**dongles;
@@ -86,7 +86,7 @@ bool			compiling(t_coder *coder, long int t_compile);
 bool			refactoring(t_coder *coder, long int t_refactor);
 bool			debugging(t_coder *coder, long int t_debug);
 bool			release_dongle(t_coder	*coder, long int start);
-bool			take_dongles(t_coder *c,t_dongle *first, t_dongle *second);
+bool			take_dongles(t_coder *c, t_dongle *first, t_dongle *second);
 void			ft_cleanup(int n_coders, t_compiler *compiler);
 void			close_simulation(t_compiler *compiler);
 long long		gettime(long long start);
