@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/19 17:58:02 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/10/08 10:18:20 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/14 10:54:04 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ bool	parser(char **av)
 	if (!av || !av[1] || !av[2] || !av[3] || !av[4]
 		|| !av[5] || !av[6] || !av[7] || !av[8])
 		return (false);
-	if ((atoi(av[1]) < 0) || (atoi(av[1]) == 0))
+	if (atoi(av[1]) <= 0)
 		return (false);
-	if ((atoi(av[2]) < 0) || (atoi(av[2]) == 0))
+	if (atoi(av[2]) <= 0)
 		return (false);
-	if ((atoi(av[3]) < 0) || (atoi(av[3]) == 0))
+	if (atoi(av[3]) <= 0)
 		return (false);
 	if ((atoi(av[4]) < 0)
 		|| ((atoi(av[4]) == 0) && (strcmp(av[4], "0") != 0)))
@@ -29,7 +29,7 @@ bool	parser(char **av)
 	if (atoi(av[5]) < 0
 		|| ((atoi(av[5]) == 0) && (strcmp(av[5], "0") != 0)))
 		return (false);
-	if ((atoi(av[6]) < 0) || (atoi(av[6]) == 0))
+	if (atoi(av[6]) <= 0)
 		return (false);
 	if (atoi(av[7]) < 0
 		|| ((atoi(av[7]) == 0) && (strcmp(av[7], "0") != 0)))

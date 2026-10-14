@@ -6,7 +6,7 @@
 /*   By: smeza-ro <smeza-ro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/20 10:46:24 by smeza-ro          #+#    #+#             */
-/*   Updated: 2026/10/08 11:37:56 by smeza-ro         ###   ########.fr       */
+/*   Updated: 2026/10/14 10:36:58 by smeza-ro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,7 @@ void	push_coder(t_dongle *dongle, t_coder *c)
 		dongle->pq->arr[1] = c;
 		if (strcmp(c->compiler->scheduler, "edf") == 0)
 		{
-			if (strcmp(c->compiler->scheduler, "edf") == 0
-				&& c == edf_scheduler(c, dongle->pq->arr[0]))
+			if (c == edf_scheduler(c, dongle->pq->arr[0]))
 				swap_pq(dongle->pq);
 		}
 	}
